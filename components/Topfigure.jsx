@@ -20,9 +20,7 @@ function Topfigure({ politicians, onChange }) {
       {politicians.map((politician, index) => (
         <SwiperSlide key={index}>
           <img
-          className="top-slide"
-             height='300px'
-             width="100%"
+            className="top-slide"
             src={`/img/politicians/${politician.name}.png`}
             alt={politician.name}
           />

@@ -20,7 +20,7 @@ const politicians = [
 
 const pokemon = [
   { name: "charmander", tag: "mander" },
-  { name: "squirtle", tag: "tle" },
+  { name: "squirtle", tag: "tle", soundex:'til' },
   { name: "snorlax", tag: "lax" },
 ];
 
@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }) {
   const { speak } = useSpeechSynthesis();
 
   useEffect(()=>{
-    const text = `${politicians[selectedPolitician].tag} ${pokemon[selectedPokemon].tag}`;
+    const text = `${politicians[selectedPolitician].soundex || politicians[selectedPolitician].tag} ${pokemon[selectedPokemon].soundex || pokemon[selectedPokemon].tag}`;
     speak({ text });
   },[selectedPokemon, selectedPolitician])
   return (
