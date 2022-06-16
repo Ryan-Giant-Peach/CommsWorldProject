@@ -30,8 +30,10 @@ function MyApp({ Component, pageProps }) {
   const { speak } = useSpeechSynthesis();
 
   useEffect(()=>{
+    const rate=1;
+    const pitch=-1;
     const text = `${politicians[selectedPolitician].soundex || politicians[selectedPolitician].tag} ${pokemon[selectedPokemon].soundex || pokemon[selectedPokemon].tag}`;
-    speak({ text });
+    speak({ text, rate, pitch });
   },[selectedPokemon, selectedPolitician])
   return (
       <div
