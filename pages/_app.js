@@ -1,10 +1,16 @@
-import Topfigure from '../components/Topfigure'
-import Bottomfigure from '../components/Bottomfigure'
-import '../styles/globals.css'
-import { useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
+import Topfigure from "../components/Topfigure";
+import Bottomfigure from "../components/Bottomfigure";
+import "../styles/globals.css";
+import { useState, useEffect } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import dynamic from 'next/dynamic';
+import { useSpeechSynthesis } from 'react-speech-kit';
 
+const Speech = dynamic(
+  () => import("react-speech"),
+  { ssr: false }
+)
 
 const politicians = [
   { name: "borisface", tag: "Boris" },
@@ -13,34 +19,51 @@ const politicians = [
 ];
 
 const pokemon = [
-  { name: 'charmander', tag: 'mander' },
-  { name: 'squirtle', tag: 'tle' },
-  { name: 'snorlax', tag: 'lax' },
-]
-
-
-
+  { name: "charmander", tag: "mander" },
+  { name: "squirtle", tag: "tle" },
+  { name: "snorlax", tag: "lax" },
+];
 
 function MyApp({ Component, pageProps }) {
-
   const [selectedPokemon, setSelectedPokemon] = useState(0);
   const [selectedPolitician, setSelectedPolitician] = useState(0);
+  const { speak } = useSpeechSynthesis();
 
+  useEffect(()=>{
+    const text = `${politicians[selectedPolitician].tag} ${pokemon[selectedPokemon].tag}`;
+    speak({ text });
+  },[selectedPokemon, selectedPolitician])
   return (
-    <>
-    <h1>{politicians[selectedPolitician].tag}{pokemon[selectedPokemon].tag}</h1>
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly',  height: '100vh' }}>
-      <div style={{  height: '50%', width: '100%', position: 'relative', zIndex: 900 }}>
-        <Topfigure  politicians={politicians} onChange={(newPolitician) => (setSelectedPolitician(newPolitician))}/>
+      <div
+      className="pageContainer"
+      >
+
+
+      <h1 className="title">
+        {politicians[selectedPolitician].tag}
+        {pokemon[selectedPokemon].tag}
+      </h1>
+        <div
+          style={{
+            height: "40%",
+            width: "100%",
+            position: "relative",
+            zIndex: 99998,
+          }}
+        >
+          <Topfigure
+            politicians={politicians}
+            onChange={(newPolitician) => setSelectedPolitician(newPolitician)}
+          />
+        </div>
+        <div style={{height: "50%", width: "100%", position: "relative" }}>
+          <Bottomfigure
+            pokemon={pokemon}
+            onChange={(newPokemon) => setSelectedPokemon(newPokemon)}
+          />
+        </div>
       </div>
-      <div style={{ height: '50%', width: '100%', position: 'relative' }}>
-        <Bottomfigure pokemon={pokemon} onChange={(newPokemon) => (setSelectedPokemon(newPokemon))} />
-      </div>
-    </div>
-    </>)
+  );
 }
 
-export default MyApp
-
-
-
+export default MyApp;
